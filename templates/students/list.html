@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+		<div class="container mat15">
+			<!----search form --->
+			<form action="" class="search-form" method="get">
+				{% csrf_token %}
+				<input type="text" name="q" value="{{ request.GET.q }}" placeholder="search">
+				<button class="btn-default" type="submit">Search</button>
+			</form>
+		{% if not empty %}
+		<table>
+		  <tr>
+			  <th>Student Id</th>
+			  <th>Fisrt Name</th>
+			  <th>Last Name</th>
+			  <th>Email</th>
+			  <th>Date Of Birth</th>
+			  <th>Speciality</th>
+			  <th>Edit</th>
+		  </tr>
+			<!---data of students displayed in table with extra data information to
+			make it easier for editing with ajax -->
+			{% for object in object_list %}
+			  <tr class="user_data_section" data-id="{{ object.id }}">
+				  <td data-element="student_id">{{ object.student_id }}</td>
+				  <td data-element="first_name">{{ object.first_name }}</td>
+				  <td data-element="last_name">{{ object.last_name }}</td>
+				  <td data-element="email">{{ object.email }}</td>
+				  <td data-element="date_of_birth">{{ object.date_of_birth|date:'Y-m-d' }}</td>
+				  <td data-element="speciality" data-select="{{ object.speciality_id }}">{{ object.speciality }}</td>
+				  <td class="ed_object">
+					  <a class="edite_link" href="{% url 'students:Update' pk=object.pk %}" data-toggle="modal" data-target="#editModal">
+						  <img class="icon" src="{% static 'images/edit.svg' %}" alt="edit icon">
+					  </a>
+					  <!--delete link -->
+					  <a class="delete_link" href="{% url 'students:Delete' pk=object.pk %}">
+						  <img class="icon" src="{% static 'images/bin.svg' %}" alt="trash icon">
+					  </a>
+				  </td>
+			  </tr>
+		{% endfor %}
+
+		</table>
+			{% else %}
+			<!---Message that displays if no data has been found-->
+						<p class="center">Sorry your search query didn't match any of Students Data or the students didn't register yet</p>
+		    {% endif %}
+		</div>
+
+		<!---bootstrap Modal that contains edit form-->
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Form</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-middel updateform" action="" method="post">
+			{% csrf_token %}
+			{{ editform.as_p }}
+			<div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        <button type="submit"  class="btn btn-primary">Save changes</button>
+			</div>
+		</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

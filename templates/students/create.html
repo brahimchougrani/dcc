@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+	<!--the django coding challange form-->
+		<div class="container full-container">
+			<div class="row">
+				<div class="col-4 defaultbg pat30 pab30">
+					    <div class="container">
+						    <h4>Welcome To Django Coding Challange</h4>
+						    <p>To Register Please Fill The Following Informations </p>
+							<form class="form-middel" action="" method="post">
+								{% csrf_token %}
+								{{ form.as_p }}
+								<button class="btn-default">Register</button>
+							</form>
+					    </div>
+				</div>
+				<div class="col-8 vh100 bgcover"  style="background: url({% static 'images/caleb-woods-RIcMwDLk1wo-unsplash.jpg' %});background-size: cover; ">
+
+				</div>
+			</div>
+		</div>
+{% endblock %}
+
